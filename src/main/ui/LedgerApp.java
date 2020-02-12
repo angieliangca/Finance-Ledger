@@ -77,6 +77,7 @@ public class LedgerApp {
     private void addItem() {
         System.out.println("Enter Income or Expense:");
         String type = input.nextLine();
+        type = type.toLowerCase();
         type = typeFormat(type);
 
         System.out.println("Enter date");
