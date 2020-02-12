@@ -164,8 +164,9 @@ class LedgerTest {
         testLedger.addItem("expense", "02-02-2020", "UBC Bookstore", "Textbook", 50.00);
         testLedger.addItem("income", "02-05-2020", "Research Lab", "Salary", 1000.00);
         String printString = testLedger.toString();
-        assertEquals("1    02-02-2020    UBC Bookstore    Textbook    -50.0\n" +
-                "2    02-05-2020    Research Lab    Salary    1000.0\n", printString);
+        assertEquals(testLedger.getItem(1).toString() + "\n" + testLedger.getItem(2).toString() + "\n", printString);
+//        assertEquals("1    02-02-2020    UBC Bookstore    Textbook    -50.0\n" +
+//                "2    02-05-2020    Research Lab    Salary    1000.0\n", printString);
     }
 
     @Test
