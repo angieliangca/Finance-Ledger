@@ -68,7 +68,7 @@ public class LedgerApp {
         System.out.println("\t1 -> add item");
         System.out.println("\t2 -> delete item");
         System.out.println("\t3 -> review details");
-        System.out.println("\t4 -> generate report");
+        System.out.println("\t4 -> generate summary");
         System.out.println("\t5 -> quit");
     }
 
@@ -76,11 +76,10 @@ public class LedgerApp {
     // EFFECTS: add an income or expense item
     private void addItem() {
         System.out.println("Enter Income or Expense:");
-        String type = input.nextLine();
-        type = type.toLowerCase();
+        String type = input.nextLine().toLowerCase();
         type = typeFormat(type);
 
-        System.out.println("Enter date");
+        System.out.println("Enter date (MM-dd-yyyy):");
         String date = input.nextLine();
         date = dateFormat(date);
 
@@ -90,14 +89,20 @@ public class LedgerApp {
         System.out.println("Enter Description:");
         String description = input.nextLine();
 
+        System.out.println("Enter Category: \n"
+                + "Select expense from: Housing, Transportation, Food, Clothing, Utilities, Entertainment, Medical, "
+                + "Miscellaneous; \n" + "Select income from: Salary, Investment.");
+        String category = input.nextLine().toLowerCase();
+        category = (type.equals("income")) ? incomeCategoryFormat(category) : expenseCategoryFormat(category);
+
         System.out.println("Enter Amount:");
         double amount = input.nextDouble();
         amount = amountFormat(amount);
 
         try {
-            myLedger.addItem(type, date, entity, description, amount);
+            myLedger.addItem(type, date, entity, description, category, amount);
         } catch (DuplicateItemException e) {
-            System.out.println("There is an existing item in the ledger");
+            System.out.println("This item exists in the ledger.");
         }
     }
 
@@ -105,12 +110,12 @@ public class LedgerApp {
     // EFFECTS: delete an income or expense item
     private void deleteItem() {
         displayDetail();
-        System.out.println("Enter the item number you want to delete");
+        System.out.println("Enter the item number you want to delete:");
         int id = input.nextInt();
         try {
             myLedger.deleteItem(id);
         } catch (InvalidIDException e) {
-            System.out.println("There is no item with the given id");
+            System.out.println("No item with the given id in the ledger.");
         }
     }
 
@@ -125,26 +130,54 @@ public class LedgerApp {
         System.out.println("Total income: " + myLedger.getTotalIncome());
         System.out.println("Total expense: " + myLedger.getTotalExpense());
         System.out.println("Net income: " + myLedger.getNetIncome());
+        maxItemAnalysis();
+        percentageAnalysis();
+    }
+
+    // EFFECTS: pull out the income and expense items with the maximum amounts in ledger
+    private void maxItemAnalysis() {
+        System.out.println("====================\n" + "Maximum Single Items");
         if (myLedger.getMaxIncome() != 0) {
             Item maxSingleIncome = myLedger.getItem(myLedger.getMaxIncome());
-            System.out.println("Largest single income: \n" + maxSingleIncome.toString());
+            System.out.println("You receive most on: \n" + maxSingleIncome.toString());
         } else {
-            System.out.println("There is no income item.");
+            System.out.println("No income item in the ledger.");
         }
         if (myLedger.getMaxExpense() != 0) {
             Item maxSingleExpense = myLedger.getItem(myLedger.getMaxExpense());
-            System.out.println("Largest single expense: \n" + maxSingleExpense.toString());
+            System.out.println("You spend most on: \n" + maxSingleExpense.toString());
         } else {
-            System.out.println("There is no expense item.");
+            System.out.println("No expense item in the ledger.");
         }
-
     }
 
+    // EFFECTS: pull out the subtotal and percentage for each income and expense category in ledger
+    private void percentageAnalysis() {
+        System.out.println("====================\n" + "Category Percentage");
+        if (myLedger.getTotalIncome() != 0) {
+            System.out.println("Your income consists of:");
+            myLedger.getIncomeCategory().forEach((name, subtotal) ->
+                    System.out.println(name + "    " + subtotal + "    "
+                            + (Math.round(subtotal / myLedger.getTotalIncome() * 1000) / 10) + "%"));
+        } else {
+            System.out.println("No income item.");
+        }
+        if (myLedger.getTotalExpense() != 0) {
+            System.out.println("Your expense consists of:");
+            myLedger.getExpenseCategory().forEach((name, subtotal) ->
+                    System.out.println(name + "    " + subtotal + "    "
+                            + (Math.round(subtotal / myLedger.getTotalExpense() * 1000) / 10) + "%"));
+        } else {
+            System.out.println("No expense item.");
+        }
+    }
+
+    // EFFECTS: check and returns the type with correct format
     private String typeFormat(String type) {
         try {
             myLedger.checkType(type);
         } catch (InvalidTypeException e) {
-            System.out.println("Please enter valid type");
+            System.out.println("Please enter valid type.");
             System.out.println("Enter Income or Expense:");
             type = input.nextLine();
             typeFormat(type);
@@ -152,23 +185,57 @@ public class LedgerApp {
         return type;
     }
 
+    // EFFECTS: check and returns the date with correct format
     private String dateFormat(String date) {
         try {
             myLedger.checkDate(date);
         } catch (InvalidDateException e) {
-            System.out.println("Please enter valid date");
-            System.out.println("Enter date");
+            System.out.println("Please enter valid date.");
+            System.out.println("Enter date (MM-dd-yyyy):");
             date = input.nextLine();
             dateFormat(date);
         }
         return date;
     }
 
+    // EFFECTS: check and returns the income category with correct format
+    private String incomeCategoryFormat(String category) {
+        try {
+            myLedger.checkIncomeCategory(category);
+        } catch (InvalidCategoryException e) {
+            System.out.println("Please select from the provided options.");
+            System.out.println("Enter Category: \n"
+                    + "Select expense from: Housing, Transportation, Food, Clothing, Utilities, Entertainment, Medical,"
+                    + " Miscellaneous; \n" + "Select income from: Salary, Investment.");
+            category = input.nextLine();
+            category = category.toLowerCase();
+            incomeCategoryFormat(category);
+        }
+        return category;
+    }
+
+    // EFFECTS: check and returns the expense category with correct format
+    private String expenseCategoryFormat(String category) {
+        try {
+            myLedger.checkExpenseCategory(category);
+        } catch (InvalidCategoryException e) {
+            System.out.println("Please select from the provided options.");
+            System.out.println("Enter Category: \n"
+                    + "Select expense from: Housing, Transportation, Food, Clothing, Utilities, Entertainment, Medical,"
+                    + " Miscellaneous; \n" + "Select income from: Salary, Investment.");
+            category = input.nextLine();
+            category = category.toLowerCase();
+            expenseCategoryFormat(category);
+        }
+        return category;
+    }
+
+    // EFFECTS: check and returns the amount with correct format
     private double amountFormat(double amount) {
         try {
             myLedger.checkAmount(amount);
         } catch (NegativeAmountException e) {
-            System.out.println("Please enter positive amount");
+            System.out.println("Please enter positive amount.");
             System.out.println("Enter Amount:");
             amount = input.nextDouble();
             amountFormat(amount);

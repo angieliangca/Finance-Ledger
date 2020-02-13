@@ -1,21 +1,23 @@
 package model;
 
 // Represents an  item in the ledger that has the following information: item number, income or expense type, date,
-// payee or payer entity, description and amount
+// payee or payer entity, description, category and amount
 public class Item {
     private int id;
     private boolean type;
     private String date;
     private String entity;
     private String description;
+    private String category;
     private Double amount;
 
     // EFFECTS: constructs an item for the given information
-    public Item(boolean type, String date, String entity, String description, Double amount) {
+    public Item(boolean type, String date, String entity, String description, String category, double amount) {
         this.type = type;
         this.date = date;
         this.entity = entity;
         this.description = description;
+        this.category = category;
         this.amount = amount;
     }
 
@@ -49,6 +51,11 @@ public class Item {
         return description;
     }
 
+    // EFFECTS: returns the category of this item
+    public String getCategory() {
+        return category;
+    }
+
     // EFFECTS: returns the amount of this item
     public Double getAmount() {
         return amount;
@@ -56,9 +63,7 @@ public class Item {
 
     // EFFECTS: returns a string of information for this item, negative amount for expense item
     public String toString() {
-        if (!isIncome()) {
-            amount = -amount;
-        }
-        return getId() + "    " + getDate() + "    " + getEntity() + "    " + getDescription() + "    " + amount;
+        return getId() + "    " + getDate() + "    " + getEntity() + "    " + getDescription() + "    "
+                + getCategory() + "    " + ((!isIncome()) ? -amount : amount);
     }
 }
