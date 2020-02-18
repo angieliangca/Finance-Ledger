@@ -21,5 +21,7 @@ accounting for a few years and have knowledge and understanding of financial con
 - As a user, I want to be able to *delete* an income or expense item to my ledger.
 - As a user, I want to be able to *review* a detailed list of items on my ledger.
 - As a user, I want to be able to *generate* a financial summary from my ledger.
+- As a user, I want to be able to *save* my ledger to file.
+- As a user, I want to be able to *load* my ledger from file when the program starts.
 - As a user, I want to be able to *search* specific items in my ledger.
 - As a user, I want to be able to *filter* items satisfying certain criteria in my ledger.

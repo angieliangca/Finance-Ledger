@@ -198,19 +198,20 @@ class LedgerTest {
         try {
             testLedger.checkType("income");
         } catch (InvalidTypeException e) {
-            fail("Please enter valid type");
+            fail("No exception expected");
         }
 
         try {
             testLedger.checkType("expense");
         } catch (InvalidTypeException e) {
-            fail("Please enter valid type");
+            fail("No exception expected");
         }
 
         try {
             testLedger.checkType("hello");
+            fail("InvalidTypeException expected");
         } catch (InvalidTypeException e) {
-
+            // expected
         }
     }
 
@@ -219,19 +220,20 @@ class LedgerTest {
         try {
             testLedger.checkDate("02-02-2020");
         } catch (InvalidDateException e) {
-            fail("Please enter valid date");
+            fail("No exception expected");
         }
 
-        try {
-            testLedger.checkDate("13-02-2020");
-        } catch (InvalidDateException e) {
-
-        }
+//        try {
+//            testLedger.checkDate("13-02-2020");
+//        } catch (InvalidDateException e) {
+//            // expected
+//        }
 
         try {
             testLedger.checkDate("2020");
+            fail("InvalidDateException expected");
         } catch (InvalidDateException e) {
-
+            // expected
         }
     }
 
@@ -240,27 +242,29 @@ class LedgerTest {
         try {
             testLedger.checkExpenseCategory("medical");
         } catch (InvalidCategoryException e) {
-            fail("Please select from the provided options");
+            fail("No exception expected");
         }
 
         try {
             testLedger.checkIncomeCategory("investment");
         } catch (InvalidCategoryException e) {
-            fail("Please select from the provided options");
+            fail("No exception expected");
         }
 
         try
         {
             testLedger.checkIncomeCategory("education");
+            fail("InvalidCategoryException expected");
         } catch (InvalidCategoryException e) {
-
+            //expected
         }
 
         try
         {
             testLedger.checkExpenseCategory("education");
+            fail("InvalidCategoryException expected");
         } catch (InvalidCategoryException e) {
-
+            // expected
         }
     }
 
@@ -269,19 +273,20 @@ class LedgerTest {
         try {
             testLedger.checkAmount(1);
         } catch (NegativeAmountException e) {
-            fail("Please enter positive amount");
+            fail("No exception expected");
         }
 
         try {
             testLedger.checkAmount(0);
         } catch (NegativeAmountException e) {
-            fail("Please enter positive amount");
+            fail("No exception expected");
         }
 
         try {
             testLedger.checkAmount(-1);
+            fail("NegativeAmountException expected");
         } catch (NegativeAmountException e) {
-
+            // expected
         }
     }
 }
