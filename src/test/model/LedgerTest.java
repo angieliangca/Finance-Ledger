@@ -9,10 +9,25 @@ import static org.junit.jupiter.api.Assertions.*;
 // Unit tests for the Ledger class
 class LedgerTest {
     private Ledger testLedger;
+    private Item testItem1;
+    private Item testItem2;
+    private Item testItem3;
+    private Item testItem4;
+    private Item testItem5;
 
     @BeforeEach
     void runBefore() {
         testLedger = new Ledger();
+        testItem1 = new Item(true, "02-15-2020", "Research Lab", "Salary",
+                "salary", 1000.00);
+        testItem2 = new Item(false, "02-10-2020", "UBC Housing", "Rent",
+                "housing", 800.00);
+        testItem3 = new Item(false, "02-02-2020", "UBC Bookstore", "Textbook",
+                "miscellaneous", 50.00);
+        testItem4 = new Item(true, "02-05-2020", "TD Bank", "Tesla stock",
+                "investment", 100.00);
+        testItem5 = new Item(false,"02-07-2020", "Save on Food", "Grocery",
+                "food", 30.00);
     }
 
     @Test
@@ -23,16 +38,17 @@ class LedgerTest {
         assertEquals(0, testLedger.getNetIncome());
         assertEquals(0, testLedger.getMaxIncome());
         assertEquals(0, testLedger.getMaxExpense());
-        assertEquals(0, (testLedger.getExpenseCategory().get("housing")));
         assertEquals(0, (testLedger.getIncomeCategory().get("salary")));
+        assertEquals(0, (testLedger.getExpenseCategory().get("housing")));
     }
 
     @Test
-    void testAddIncomeItem() {
+    void testAddIncomeItemElement() {
         try {
-            testLedger.addItem("income", "02-05-2020", "Research Lab", "salary", "salary", 1000.00);
+            testLedger.addItem("income", "02-15-2020", "Research Lab", "Salary",
+                    "salary", 1000.00);
         } catch (DuplicateItemException e) {
-            fail("There is an existing item in the ledger");
+            fail("No exception was expected");
         }
         assertEquals(1, testLedger.numItems());
         assertEquals(1000, testLedger.getTotalIncome());
@@ -40,38 +56,69 @@ class LedgerTest {
         assertEquals(1000, testLedger.getNetIncome());
         assertEquals(1, testLedger.getMaxIncome());
         assertEquals(0, testLedger.getMaxExpense());
-        assertEquals(0, (testLedger.getIncomeCategory().get("investment")));
         assertEquals(1000, (testLedger.getIncomeCategory().get("salary")));
+    }
+
+    @Test
+    void testAddIncomeItem() {
+        try {
+            testLedger.addItem(testItem1);
+        } catch (DuplicateItemException e) {
+            fail("No exception was expected");
+        }
+        assertEquals(1, testLedger.numItems());
+        assertEquals(1000, testLedger.getTotalIncome());
+        assertEquals(0, testLedger.getTotalExpense());
+        assertEquals(1000, testLedger.getNetIncome());
+        assertEquals(1, testLedger.getMaxIncome());
+        assertEquals(0, testLedger.getMaxExpense());
+        assertEquals(1000, (testLedger.getIncomeCategory().get("salary")));
+    }
+
+    @Test
+    void testAddExpenseItemElement() {
+        try {
+            testLedger.addItem("expense", "02-10-2020", "UBC Housing", "Rent",
+                    "housing", 800.00);
+        } catch (DuplicateItemException e) {
+            fail("No exception was expected");
+        }
+        assertEquals(1, testLedger.numItems());
+        assertEquals(0, testLedger.getTotalIncome());
+        assertEquals(800, testLedger.getTotalExpense());
+        assertEquals(-800, testLedger.getNetIncome());
+        assertEquals(0, testLedger.getMaxIncome());
+        assertEquals(1, testLedger.getMaxExpense());
+        assertEquals(800, (testLedger.getExpenseCategory().get("housing")));
     }
 
     @Test
     void testAddExpenseItem() {
         try {
-            testLedger.addItem("expense", "02-02-2020", "UBC Bookstore", "Textbook", "miscellaneous", 50.00);
+            testLedger.addItem(testItem2);
         } catch (DuplicateItemException e) {
-            fail("There is an existing item in the ledger");
+            fail("No exception was expected");
         }
         assertEquals(1, testLedger.numItems());
         assertEquals(0, testLedger.getTotalIncome());
-        assertEquals(50, testLedger.getTotalExpense());
-        assertEquals(-50, testLedger.getNetIncome());
+        assertEquals(800, testLedger.getTotalExpense());
+        assertEquals(-800, testLedger.getNetIncome());
         assertEquals(0, testLedger.getMaxIncome());
         assertEquals(1, testLedger.getMaxExpense());
-        assertEquals(0, (testLedger.getExpenseCategory().get("housing")));
-        assertEquals(50, (testLedger.getExpenseCategory().get("miscellaneous")));
+        assertEquals(800, (testLedger.getExpenseCategory().get("housing")));
     }
 
     @Test
     void testAddDuplicateItem() {
+        // test adding items that do not satisfy duplicate criteria
         try {
-            testLedger.addItem("expense", "02-02-2020", "UBC Bookstore", "Textbook", "miscellaneous", 50.00);
+            testLedger.addItem(testItem3);
             testLedger.addItem("expense", "02-02-2020", "UBC Bookstore", "Textbook", "miscellaneous", 100.00);
             testLedger.addItem("expense", "02-02-2020", "UBC", "Textbook", "miscellaneous", 50.00);
             testLedger.addItem("expense", "02-01-2020", "UBC Bookstore", "Textbook", "miscellaneous", 50.00);
             testLedger.addItem("income", "02-02-2020", "UBC Bookstore", "Textbook", "salary", 50.00);
-            testLedger.addItem("expense", "02-02-2020", "UBC Bookstore", "Textbook", "miscellaneous", 50.00);
         } catch (DuplicateItemException e) {
-
+            fail("No exception was expected");
         }
         assertEquals(5, testLedger.numItems());
         assertEquals(50, testLedger.getTotalIncome());
@@ -79,15 +126,39 @@ class LedgerTest {
         assertEquals(-200, testLedger.getNetIncome());
         assertEquals(5, testLedger.getMaxIncome());
         assertEquals(2, testLedger.getMaxExpense());
-        assertEquals(0, (testLedger.getExpenseCategory().get("housing")));
         assertEquals(250, (testLedger.getExpenseCategory().get("miscellaneous")));
         assertEquals(50, (testLedger.getIncomeCategory().get("salary")));
+
+        // test adding item that throw DuplicateItemException
+        try {
+            testLedger.addItem(testItem3);
+            fail("DuplicateItemException was expected.");
+        } catch (DuplicateItemException e) {
+            // expected
+        }
     }
 
     @Test
-    void testDeleteItem() throws DuplicateItemException {
+    void testDeleteIncomeItem() throws DuplicateItemException {
         try {
-            testLedger.addItem("expense", "02-02-2020", "UBC Bookstore", "Textbook", "miscellaneous", 50.00);
+            testLedger.addItem(testItem1);
+            assertTrue(testLedger.deleteItem(1));
+        } catch (InvalidIDException e) {
+            fail("There is no item with the given id");
+        }
+        assertEquals(0, testLedger.numItems());
+        assertEquals(0, testLedger.getTotalIncome());
+        assertEquals(0, testLedger.getTotalExpense());
+        assertEquals(0, testLedger.getNetIncome());
+        assertEquals(0, testLedger.getMaxIncome());
+        assertEquals(0, testLedger.getMaxExpense());
+        assertEquals(0, (testLedger.getIncomeCategory().get("salary")));
+    }
+
+    @Test
+    void testDeleteExpenseItem() throws DuplicateItemException {
+        try {
+            testLedger.addItem(testItem2);
             assertTrue(testLedger.deleteItem(1));
         } catch (InvalidIDException e) {
             fail("There is no item with the given id");
@@ -99,7 +170,6 @@ class LedgerTest {
         assertEquals(0, testLedger.getMaxIncome());
         assertEquals(0, testLedger.getMaxExpense());
         assertEquals(0, (testLedger.getExpenseCategory().get("housing")));
-        assertEquals(0, (testLedger.getExpenseCategory().get("miscellaneous")));
     }
 
     @Test
@@ -109,16 +179,20 @@ class LedgerTest {
 
     @Test
     void testDeleteInvalidIDItem() throws DuplicateItemException {
-        testLedger.addItem("expense", "02-02-2020", "UBC Bookstore", "Textbook", "miscellaneous", 50.00);
+        testLedger.addItem(testItem3);
+
         try {
             testLedger.deleteItem(2);
+            fail("InvalidIDException was expected");
         } catch (InvalidIDException e) {
-
+            // expected
         }
+
         try {
             testLedger.deleteItem(0);
+            fail("InvalidIDException was expected");
         } catch (InvalidIDException e) {
-
+            // expected
         }
         assertEquals(1, testLedger.numItems());
         assertEquals(0, testLedger.getTotalIncome());
@@ -126,101 +200,116 @@ class LedgerTest {
         assertEquals(-50, testLedger.getNetIncome());
         assertEquals(0, testLedger.getMaxIncome());
         assertEquals(1, testLedger.getMaxExpense());
-        assertEquals(0, (testLedger.getExpenseCategory().get("housing")));
         assertEquals(50, (testLedger.getExpenseCategory().get("miscellaneous")));
     }
 
     @Test
-    void testAddMultipleItem() throws DuplicateItemException {
-        testLedger.addItem("expense", "02-01-2020", "UBC Housing", "Rent", "housing", 200.00);
-        testLedger.addItem("expense", "02-02-2020", "UBC Bookstore", "Textbook", "miscellaneous", 50.00);
-        testLedger.addItem("expense", "02-03-2020", "Save on Food", "Grocery", "food", 30.00);
-        testLedger.addItem("income", "02-05-2020", "Research Lab", "Salary", "salary", 1000.00);
-        testLedger.addItem("income", "02-10-2020", "Parent", "Reimbursement", "salary", 80.00);
+    void testAddMultipleItems() throws DuplicateItemException {
+        testLedger.addItem(testItem1);
+        testLedger.addItem(testItem2);
+        testLedger.addItem(testItem3);
+        testLedger.addItem(testItem4);
+        testLedger.addItem(testItem5);
 
         assertEquals(5, testLedger.numItems());
-        assertEquals(1080, testLedger.getTotalIncome());
-        assertEquals(280, testLedger.getTotalExpense());
-        assertEquals(800, testLedger.getNetIncome());
-        assertEquals(4, testLedger.getMaxIncome());
-        assertEquals(1, testLedger.getMaxExpense());
-        assertEquals(200, (testLedger.getExpenseCategory().get("housing")));
-        assertEquals(50, (testLedger.getExpenseCategory().get("miscellaneous")));
-        assertEquals(30, (testLedger.getExpenseCategory().get("food")));
-        assertEquals(1080, (testLedger.getIncomeCategory().get("salary")));
+        assertEquals(1100, testLedger.getTotalIncome());
+        assertEquals(880, testLedger.getTotalExpense());
+        assertEquals(220, testLedger.getNetIncome());
+        assertEquals(1, testLedger.getMaxIncome());
+        assertEquals(2, testLedger.getMaxExpense());
+        assertEquals(800, (testLedger.getExpenseCategory().get("housing")));
         assertEquals(0, (testLedger.getExpenseCategory().get("transportation")));
+        assertEquals(30, (testLedger.getExpenseCategory().get("food")));
         assertEquals(0, (testLedger.getExpenseCategory().get("clothing")));
         assertEquals(0, (testLedger.getExpenseCategory().get("utilities")));
         assertEquals(0, (testLedger.getExpenseCategory().get("entertainment")));
         assertEquals(0, (testLedger.getExpenseCategory().get("medical")));
-        assertEquals(0, (testLedger.getIncomeCategory().get("investment")));
+        assertEquals(1000, (testLedger.getIncomeCategory().get("salary")));
+        assertEquals(100, (testLedger.getIncomeCategory().get("investment")));
+        assertEquals(50, (testLedger.getExpenseCategory().get("miscellaneous")));
     }
 
     @Test
     void testDeleteMultipleItem() throws InvalidIDException, DuplicateItemException {
-        testLedger.addItem("expense", "02-01-2020", "UBC Housing", "Rent", "housing", 200.00);
-        testLedger.addItem("expense", "02-02-2020", "UBC Bookstore", "Textbook", "miscellaneous", 50.00);
-        testLedger.addItem("expense", "02-03-2020", "Save on Food", "Grocery", "food", 30.00);
-        testLedger.addItem("income", "02-05-2020", "Research Lab", "Salary", "salary", 1000.00);
-        testLedger.addItem("income", "02-10-2020", "Parent", "Reimbursement", "salary", 80.00);
+        testLedger.addItem(testItem1);
+        testLedger.addItem(testItem2);
+        testLedger.addItem(testItem3);
+        testLedger.addItem(testItem4);
+        testLedger.addItem(testItem5);
         testLedger.deleteItem(2);
         assertEquals(4, testLedger.numItems());
-        assertEquals(1080, testLedger.getTotalIncome());
-        assertEquals(230, testLedger.getTotalExpense());
-        assertEquals(850, testLedger.getNetIncome());
-        assertEquals(3, testLedger.getMaxIncome());
-        assertEquals(1, testLedger.getMaxExpense());
-        assertEquals(0, (testLedger.getExpenseCategory().get("miscellaneous")));
+        assertEquals(1100, testLedger.getTotalIncome());
+        assertEquals(80, testLedger.getTotalExpense());
+        assertEquals(1020, testLedger.getNetIncome());
+        assertEquals(1, testLedger.getMaxIncome());
+        assertEquals(2, testLedger.getMaxExpense());
+        assertEquals(0, (testLedger.getExpenseCategory().get("housing")));
 
         testLedger.deleteItem(3);
-        assertEquals(80, testLedger.getItem(3).getAmount());
-        assertEquals(80, (testLedger.getIncomeCategory().get("salary")));
+        assertEquals(30, testLedger.getItem(3).getAmount());
+        assertEquals(30, (testLedger.getExpenseCategory().get("food")));
         testLedger.deleteItem(3);
         assertEquals(2, testLedger.numItems());
-        assertEquals(0, testLedger.getTotalIncome());
-        assertEquals(230, testLedger.getTotalExpense());
-        assertEquals(-230, testLedger.getNetIncome());
-        assertEquals(0, testLedger.getMaxIncome());
-        assertEquals(1, testLedger.getMaxExpense());
-        assertEquals(0, (testLedger.getIncomeCategory().get("salary")));
+        assertEquals(1000, testLedger.getTotalIncome());
+        assertEquals(50, testLedger.getTotalExpense());
+        assertEquals(950, testLedger.getNetIncome());
+        assertEquals(1, testLedger.getMaxIncome());
+        assertEquals(2, testLedger.getMaxExpense());
+        assertEquals(0, (testLedger.getExpenseCategory().get("housing")));
+        assertEquals(0, (testLedger.getExpenseCategory().get("transportation")));
+        assertEquals(0, (testLedger.getExpenseCategory().get("food")));
+        assertEquals(0, (testLedger.getExpenseCategory().get("clothing")));
+        assertEquals(0, (testLedger.getExpenseCategory().get("utilities")));
+        assertEquals(0, (testLedger.getExpenseCategory().get("entertainment")));
+        assertEquals(0, (testLedger.getExpenseCategory().get("medical")));
+        assertEquals(1000, (testLedger.getIncomeCategory().get("salary")));
+        assertEquals(0, (testLedger.getIncomeCategory().get("investment")));
+        assertEquals(50, (testLedger.getExpenseCategory().get("miscellaneous")));
     }
 
     @Test
     void testToString() throws DuplicateItemException {
-        testLedger.addItem("expense", "02-02-2020", "UBC Bookstore", "Textbook", "miscellaneous", 50.00);
-        testLedger.addItem("income", "02-05-2020", "Research Lab", "Salary", "salary", 1000.00);
+        testLedger.addItem(testItem1);
+        testLedger.addItem(testItem2);
         String printString = testLedger.toString();
         assertEquals(testLedger.getItem(1).toString() + "\n" + testLedger.getItem(2).toString() + "\n", printString);
     }
 
     @Test
-    void testCheckType() {
+    void testInvalidTypeException() {
         try {
             testLedger.checkType("income");
         } catch (InvalidTypeException e) {
-            fail("No exception expected");
+            fail("No exception was expected.");
         }
 
         try {
             testLedger.checkType("expense");
         } catch (InvalidTypeException e) {
-            fail("No exception expected");
+            fail("No exception was expected.");
         }
 
         try {
-            testLedger.checkType("hello");
-            fail("InvalidTypeException expected");
+            testLedger.checkType("spending");
+            fail("InvalidTypeException was expected.");
         } catch (InvalidTypeException e) {
             // expected
         }
     }
 
     @Test
-    void testCheckDate() {
+    void testInvalidDateException() {
         try {
             testLedger.checkDate("02-02-2020");
         } catch (InvalidDateException e) {
-            fail("No exception expected");
+            fail("No exception was expected");
+        }
+
+        try {
+            testLedger.checkDate("2020");
+            fail("InvalidDateException was expected");
+        } catch (InvalidDateException e) {
+            // expected
         }
 
 //        try {
@@ -228,33 +317,26 @@ class LedgerTest {
 //        } catch (InvalidDateException e) {
 //            // expected
 //        }
-
-        try {
-            testLedger.checkDate("2020");
-            fail("InvalidDateException expected");
-        } catch (InvalidDateException e) {
-            // expected
-        }
     }
 
     @Test
-    void testCheckCategory() {
+    void testInvalidCategoryException() {
         try {
             testLedger.checkExpenseCategory("medical");
         } catch (InvalidCategoryException e) {
-            fail("No exception expected");
+            fail("No exception was expected.");
         }
 
         try {
             testLedger.checkIncomeCategory("investment");
         } catch (InvalidCategoryException e) {
-            fail("No exception expected");
+            fail("No exception was expected.");
         }
 
         try
         {
             testLedger.checkIncomeCategory("education");
-            fail("InvalidCategoryException expected");
+            fail("InvalidCategoryException was expected.");
         } catch (InvalidCategoryException e) {
             //expected
         }
@@ -262,29 +344,29 @@ class LedgerTest {
         try
         {
             testLedger.checkExpenseCategory("education");
-            fail("InvalidCategoryException expected");
+            fail("InvalidCategoryException was expected.");
         } catch (InvalidCategoryException e) {
             // expected
         }
     }
 
     @Test
-    void testCheckAmount() {
+    void testNegativeAmountException() {
         try {
             testLedger.checkAmount(1);
         } catch (NegativeAmountException e) {
-            fail("No exception expected");
+            fail("No exception was expected.");
         }
 
         try {
             testLedger.checkAmount(0);
         } catch (NegativeAmountException e) {
-            fail("No exception expected");
+            fail("No exception was expected.");
         }
 
         try {
             testLedger.checkAmount(-1);
-            fail("NegativeAmountException expected");
+            fail("NegativeAmountException was expected.");
         } catch (NegativeAmountException e) {
             // expected
         }

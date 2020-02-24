@@ -1,13 +1,16 @@
 package model;
 
 import exceptions.*;
+import persistence.Reader;
+import persistence.Saveable;
 
+import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 // Represents a ledger having a list of income and expense items
-public class Ledger {
+public class Ledger implements Saveable {
     private List<Item> myLedger;
     private Map<String, Double> expenseCategory;
     private Map<String, Double> incomeCategory;
@@ -38,6 +41,24 @@ public class Ledger {
         } else {
             expenseCategory.computeIfPresent(category, (name, subtotal) -> subtotal + amount);
             totalExpense += amount;
+        }
+        netIncome = totalIncome - totalExpense;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: overload the addItem method with item as parameter
+    public void addItem(Item item) throws DuplicateItemException {
+        if (isDuplicate(item.isIncome() ? "income" : "expense", item.getDate(), item.getEntity(), item.getAmount())) {
+            throw new DuplicateItemException();
+        }
+        item.setId(myLedger.size());
+        myLedger.add(item);
+        if (item.isIncome()) {
+            incomeCategory.computeIfPresent(item.getCategory(), (name, subtotal) -> subtotal + item.getAmount());
+            totalIncome += item.getAmount();
+        } else {
+            expenseCategory.computeIfPresent(item.getCategory(), (name, subtotal) -> subtotal + item.getAmount());
+            totalExpense += item.getAmount();
         }
         netIncome = totalIncome - totalExpense;
     }
@@ -217,4 +238,22 @@ public class Ledger {
         return false;
     }
 
+    @Override
+    public void save(PrintWriter printWriter) {
+        for (Item item : myLedger) {
+            printWriter.print(item.getId());
+            printWriter.print(Reader.DELIMITER);
+            printWriter.print(item.isIncome());
+            printWriter.print(Reader.DELIMITER);
+            printWriter.print(item.getDate());
+            printWriter.print(Reader.DELIMITER);
+            printWriter.println(item.getEntity());
+            printWriter.print(Reader.DELIMITER);
+            printWriter.print(item.getDescription());
+            printWriter.print(Reader.DELIMITER);
+            printWriter.println(item.getCategory());
+            printWriter.print(Reader.DELIMITER);
+            printWriter.println(item.getAmount());
+        }
+    }
 }

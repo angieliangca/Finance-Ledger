@@ -3,13 +3,20 @@ package ui;
 import exceptions.*;
 import model.Item;
 import model.Ledger;
+import persistence.Reader;
+import persistence.Writer;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Scanner;
 
 // Ledger application
 public class LedgerApp {
+    private static final String LEDGER_FILE = "./data/myLedger.txt";
     private Scanner input;
-    private Ledger myLedger = new Ledger();
+    private Ledger myLedger;
 
     // EFFECTS: runs the ledger application
     public LedgerApp() {
@@ -22,6 +29,8 @@ public class LedgerApp {
         boolean running = true;
         String command;
         input = new Scanner(System.in);
+
+        loadLedger();
 
         System.out.println("Welcome to Ledger");
 
@@ -41,6 +50,31 @@ public class LedgerApp {
     }
 
     // MODIFIES: this
+    // EFFECTS: loads ledger from LEDGER_FILE, if that file exists; otherwise creates new ledger
+    private void loadLedger() {
+        try {
+            myLedger = Reader.readLedger(new File(LEDGER_FILE));
+        } catch (IOException | DuplicateItemException e) {
+            myLedger = new Ledger();
+        }
+    }
+
+    // EFFECTS: saves state of ledger to LEDGER_FILE
+    private void saveAccounts() {
+        try {
+            Writer writer = new Writer(new File(LEDGER_FILE));
+            writer.write(myLedger);
+            writer.close();
+            System.out.println("Your ledger has been saved to file " + LEDGER_FILE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Sorry, unable to save your ledger to " + LEDGER_FILE);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            // this is due to a programming error
+        }
+    }
+
+    // MODIFIES: this
     // EFFECTS: processes user command
     private void processCommand(String command) {
         switch (command) {
@@ -55,6 +89,9 @@ public class LedgerApp {
                 break;
             case "4":
                 createReport();
+                break;
+            case "5":
+                saveAccounts();
                 break;
             default:
                 System.out.println("The option entered is invalid");
