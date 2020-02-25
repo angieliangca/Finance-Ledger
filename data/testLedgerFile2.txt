@@ -1,0 +1,2 @@
+1,false,02-02-2020,UBC Bookstore,Textbook,miscellaneous,50.0
+2,true,02-05-2020,TD Bank,Tesla stock,investment,100.0
