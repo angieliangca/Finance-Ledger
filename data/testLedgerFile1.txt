@@ -1,0 +1,2 @@
+1,true,02-15-2020,Research Lab,Salary,salary,1000.0
+2,false,02-10-2020,UBC Housing,Rent,housing,800.0

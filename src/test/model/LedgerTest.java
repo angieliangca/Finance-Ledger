@@ -136,6 +136,13 @@ class LedgerTest {
         } catch (DuplicateItemException e) {
             // expected
         }
+        try {
+            testLedger.addItem("income", "02-02-2020", "UBC Bookstore", "Textbook",
+                    "salary", 50.00);
+            fail("DuplicateItemException was expected.");
+        } catch (DuplicateItemException e) {
+            // expected
+        }
     }
 
     @Test
