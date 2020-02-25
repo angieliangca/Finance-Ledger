@@ -3,6 +3,7 @@ package persistence;
 import exceptions.DuplicateItemException;
 import model.Item;
 import model.Ledger;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -12,6 +13,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 // Unit tests for the Reader class
 public class ReaderTest {
+    private Reader testReader;
+
+    @BeforeEach
+    void runBefore() {
+        testReader = new Reader();
+    }
+
     @Test
     void testParseAccountsFile1() {
         try {
