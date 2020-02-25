@@ -247,13 +247,14 @@ public class Ledger implements Saveable {
             printWriter.print(Reader.DELIMITER);
             printWriter.print(item.getDate());
             printWriter.print(Reader.DELIMITER);
-            printWriter.println(item.getEntity());
+            printWriter.print(item.getEntity());
             printWriter.print(Reader.DELIMITER);
             printWriter.print(item.getDescription());
             printWriter.print(Reader.DELIMITER);
-            printWriter.println(item.getCategory());
+            printWriter.print(item.getCategory());
             printWriter.print(Reader.DELIMITER);
-            printWriter.println(item.getAmount());
+            printWriter.print(item.getAmount());
+            printWriter.print("\n");
         }
     }
 }

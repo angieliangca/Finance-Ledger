@@ -55,7 +55,7 @@ public class WriterTest {
             assertEquals("02-10-2020", writtenItem2.getDate());
             assertEquals("UBC Housing", writtenItem2.getEntity());
             assertEquals("Rent", writtenItem2.getDescription());
-            assertEquals("Rent", writtenItem2.getCategory());
+            assertEquals("housing", writtenItem2.getCategory());
             assertEquals(800.00, writtenItem2.getAmount());
 
         } catch (IOException | DuplicateItemException e) {
