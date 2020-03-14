@@ -68,8 +68,9 @@ public class Item {
 
     // EFFECTS: returns a string of information for this item, negative amount for expense item
     public String toString() {
-        return getId() + "    " + getDate() + "    " + getEntity() + "    " + getDescription() + "    "
-                + getCategory() + "    " + ((!isIncome()) ? -amount : amount);
+        String typeStr = isIncome() ? "Income" : "Expense";
+        return typeStr + "    " + getDate() + "    " + getEntity() + "    " + getDescription()
+                + "    " + getCategory() + "    " + ((!isIncome()) ? -amount : amount);
     }
 
 }

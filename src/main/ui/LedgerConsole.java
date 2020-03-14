@@ -13,13 +13,13 @@ import java.io.UnsupportedEncodingException;
 import java.util.Scanner;
 
 // Ledger application
-public class LedgerApp {
+public class LedgerConsole {
     private static final String LEDGER_FILE = "./data/myLedger.txt";
     private Scanner input;
     private Ledger myLedger;
 
     // EFFECTS: runs the ledger application
-    public LedgerApp() {
+    public LedgerConsole() {
         runLedger();
     }
 
@@ -40,6 +40,7 @@ public class LedgerApp {
             input.skip("\n");
 
             if (command.equals("5")) {
+                processCommand(command);
                 running = false;
             } else {
                 processCommand(command);

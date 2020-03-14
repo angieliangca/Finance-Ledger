@@ -112,17 +112,17 @@ public class Ledger implements Saveable {
     // EFFECTS: initialize the income category list and expense category list
     private void initCategory() {
         incomeCategory = new HashMap<String, Double>();
-        incomeCategory.put("salary", 0.00);
-        incomeCategory.put("investment", 0.00);
+        incomeCategory.put("Salary", 0.00);
+        incomeCategory.put("Investment", 0.00);
         expenseCategory = new HashMap<String, Double>();
-        expenseCategory.put("housing", 0.00);
-        expenseCategory.put("transportation", 0.00);
-        expenseCategory.put("food", 0.00);
-        expenseCategory.put("clothing", 0.00);
-        expenseCategory.put("utilities", 0.00);
-        expenseCategory.put("entertainment", 0.00);
-        expenseCategory.put("medical", 0.00);
-        expenseCategory.put("miscellaneous", 0.00);
+        expenseCategory.put("Housing", 0.00);
+        expenseCategory.put("Transportation", 0.00);
+        expenseCategory.put("Food", 0.00);
+        expenseCategory.put("Clothing", 0.00);
+        expenseCategory.put("Utilities", 0.00);
+        expenseCategory.put("Entertainment", 0.00);
+        expenseCategory.put("Medical", 0.00);
+        expenseCategory.put("Miscellaneous", 0.00);
     }
 
     // EFFECTS: returns the total income amount on this ledger
@@ -256,5 +256,9 @@ public class Ledger implements Saveable {
             printWriter.print(item.getAmount());
             printWriter.print("\n");
         }
+    }
+
+    public List<Item> getMyLedger() {
+        return myLedger;
     }
 }
