@@ -102,8 +102,9 @@ public class Ledger implements Saveable {
             if (!item.isIncome()) {
                 amount = -item.getAmount();
             }
-            printLedger.append(item.getId()).append("    ").append(item.getDate()).append("    ")
-                    .append(item.getEntity()).append("    ").append(item.getDescription()).append("    ")
+            String typeStr = item.isIncome() ? "Income" : "Expense";
+            printLedger.append(item.getId()).append("    ").append(typeStr).append("    ").append(item.getDate())
+                    .append("    ").append(item.getEntity()).append("    ").append(item.getDescription()).append("    ")
                     .append(item.getCategory()).append("    ").append(amount).append("\n");
         }
         return printLedger.toString();
