@@ -23,3 +23,32 @@ accounting for a few years and have knowledge and understanding of financial con
 - As a user, I want to be able to *generate* a financial summary from my ledger.
 - As a user, I want to be able to *save* my ledger to file.
 - As a user, I want to be able to *load* my ledger from file when the program starts.
+
+## GUI Navigation
+
+- The control pane at the bottom of the main window has six buttons for six user stories. 
+- The user can either load data from an existing file by clicking the Load Ledger button to open a file chooser where 
+they can select a txt file, or start with an empty ledger. In this demo, you may select the myLedger.txt file from the 
+data folder. 
+- The input pane on the left of the main window has six input fields to add an item. The category list combo box changes 
+according to the type radio button selected. The amount formatted text field helps format the amount entered by the user
+to a positive number with two decimal points. The user can click the Add Item button after filling in the fields. If the
+user try to add a duplicate item, a message will pop up. In this demo, you may try to add different items, then just 
+click the add button twice to see the duplicate item message.
+- The display pane on the right of the main window has a scroll pane to display the item list. The user can click the
+Review Details button to view the ledger. After the item list is displayed, the Review Details button turns into Hide
+Details button so the user can hide items if confidential. When the display is on, the item lists will be updated in 
+real-time if an item is added or deleted. In this demo, you may toggle between review and hide, and try to add a new 
+item and delete an item from the list to see the view updates.
+- The user can delete an item by selecting that item on the display pane. The Delete Item button is disabled when 
+details are hidden to avoid deleting an item accidentally. If the user click the delete button the ledger is empty or 
+without selecting an item, a message will pop up. In this demo, you may first turn on the review details then click 
+delete to see the empty selection message, then select an item from the list to check the actual delete, then finally 
+deleting all the items and click delete one more time to see the empty ledger message.
+- The user can generate summary by clicking the Generate Report button then a new window will open. In addition to the 
+financial summary, maximum single items and category percentage analysis on the left, there will be a picture on the 
+right showing your current financial status. In this demo, you can enter different combinations of items to check the 
+calculation and try net income >= 1000000, <= 0 or in between to view different interesting pictures.
+- The user can finally save data by clicking the Save Ledger button. However, even if the user forget to save before
+exit the application, a recover.txt file will be created in the data folder. In this demo, you may try to save the 
+ledger, or just simply close the window then check the recover.txt file.

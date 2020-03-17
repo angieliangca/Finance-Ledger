@@ -26,7 +26,7 @@ public class ReportFrame extends JFrame {
 
     // EFFECTS: constructs report frame
     public ReportFrame(Ledger myLedger) {
-        super("Financial ReportFrame");
+        super("Financial Report");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(WIDTH, HEIGHT);
         ((JPanel) getContentPane()).setBorder(new EmptyBorder(BORDER, BORDER, BORDER, BORDER));
@@ -117,7 +117,7 @@ public class ReportFrame extends JFrame {
         if (myLedger.getNetIncome() >= 1000000) {
             ImageIcon imageIcon = new ImageIcon("pic/pic1.jpeg");
             return new ImageIcon(resizeImage(imageIcon));
-        } else if (myLedger.getNetIncome() < 0) {
+        } else if (myLedger.getNetIncome() <= 0) {
             ImageIcon imageIcon = new ImageIcon("pic/pic2.jpg");
             return new ImageIcon(resizeImage(imageIcon));
         } else {
