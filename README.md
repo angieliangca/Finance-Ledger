@@ -24,6 +24,27 @@ accounting for a few years and have knowledge and understanding of financial con
 - As a user, I want to be able to *save* my ledger to file.
 - As a user, I want to be able to *load* my ledger from file when the program starts.
 
+## Instructions for Grader
+
+- You can generate the first required event by filling in the six fields labelled "Type", "Date", "Payee/Payer Name", 
+"Description", "Category" and "Amount" in the input pane then clicking the button labelled "Add Item". You can click
+the "Review Details" button to view the list.
+
+- You can generate the second required event by selecting an item from the display pane then clicking the button 
+labelled "Delete Item". Note that the deletion event is only allowed when the list is displayed while the delete button
+is disabled after you click "Hide Details".
+
+- You can locate my visual component by clicking the button labelled "Generate Report". The image changes based on the 
+net income in the current ledger.
+
+- You can save the state of my application by clicking the "Save Ledger" button. In case you forget to save the data 
+before exiting the program, a recover.txt file is saved when you close the window.
+
+- You can reload the state of my application by clicking the "Load Ledger" button then selecting the txt file you would
+like to reload.
+
+- More details can be found in GUI Navigation section below.
+
 ## GUI Navigation
 
 - The control pane at the bottom of the main window has six buttons for six user stories. 
