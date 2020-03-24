@@ -1,11 +1,7 @@
 package model;
 
-import persistence.Reader;
-import persistence.Saveable;
 
-import java.io.PrintWriter;
-
-// Represents an  item in the ledger that has the following information: item number, income or expense type, date,
+// Represents an item in the ledger that has the following information: item number, income or expense type, date,
 // payee or payer entity, description, category and amount
 public class Item {
     private int id;

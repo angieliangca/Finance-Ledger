@@ -15,6 +15,7 @@ import java.util.Scanner;
 // Ledger application
 public class LedgerConsole {
     private static final String LEDGER_FILE = "./data/myLedger.txt";
+
     private Scanner input;
     private Ledger myLedger;
 
@@ -191,23 +192,12 @@ public class LedgerConsole {
 
     // EFFECTS: pull out the subtotal and percentage for each income and expense category in ledger
     private void percentageAnalysis() {
-        System.out.println("====================\n" + "Category Percentage");
-        if (myLedger.getTotalIncome() != 0) {
-            System.out.println("Your income consists of:");
-            myLedger.getIncomeCategory().forEach((name, subtotal) ->
-                    System.out.println(name + "    " + subtotal + "    "
-                            + (Math.round(subtotal / myLedger.getTotalIncome() * 1000) / 10) + "%"));
-        } else {
-            System.out.println("No income item.");
-        }
-        if (myLedger.getTotalExpense() != 0) {
-            System.out.println("Your expense consists of:");
-            myLedger.getExpenseCategory().forEach((name, subtotal) ->
-                    System.out.println(name + "    " + subtotal + "    "
-                            + (Math.round(subtotal / myLedger.getTotalExpense() * 1000) / 10) + "%"));
-        } else {
-            System.out.println("No expense item.");
-        }
+        String header = "====================\n" + "Category Percentage" + "\n";
+        String incomeSection = "Your income consists of:" + "\n";
+        StringBuilder incomePercentage = myLedger.getCategory().incomePercentageToString(myLedger);
+        String expenseSection = "Your expense consists of:" + "\n";
+        StringBuilder expensePercentage = myLedger.getCategory().expensePercentageToString(myLedger);
+        System.out.println(header + incomeSection + incomePercentage + expenseSection + expensePercentage);
     }
 
     // EFFECTS: check and returns the type with correct format
@@ -239,7 +229,7 @@ public class LedgerConsole {
     // EFFECTS: check and returns the income category with correct format
     private String incomeCategoryFormat(String category) {
         try {
-            myLedger.checkIncomeCategory(category);
+            myLedger.getCategory().checkIncomeCategory(category);
         } catch (InvalidCategoryException e) {
             System.out.println("Please select from the provided options.");
             System.out.println("Enter Category: \n"
@@ -255,7 +245,7 @@ public class LedgerConsole {
     // EFFECTS: check and returns the expense category with correct format
     private String expenseCategoryFormat(String category) {
         try {
-            myLedger.checkExpenseCategory(category);
+            myLedger.getCategory().checkExpenseCategory(category);
         } catch (InvalidCategoryException e) {
             System.out.println("Please select from the provided options.");
             System.out.println("Enter Category: \n"

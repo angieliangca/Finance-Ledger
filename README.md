@@ -79,3 +79,27 @@ LedgerTest class, the testAddIncomeItem and testAddExpenseItem are for the case 
 the testAddDuplicateItem is to test the DuplicateItemException is expected; the testDeleteIncomeItem and the 
 testDeleteExpenseItem are for the case where exception is not expected while the testDeleteInvalidIDItem is to test 
 the InvalidIDException is expected.
+
+## Phase 4: Task 3
+
+Problem 1:
+In the Ledger class, there are two addItem methods, one with six parameters called by LedgerConsole, InputPanel and 
+LedgerTest while the other one with one parameter called by Reader, LedgerTest and WriterTest. Because the six 
+parameters are the fields of the one parameter Item, there are duplicate codes in these two methods and if changes
+are made in the caller class, these two methods will have to change simultaneously to maintain the functionality. These
+two addItem methods may cause too much inter-class coupling.
+
+Refactor 1:
+The second method has been refactored to call the first method by decomposing the Item. In this way, there will be less 
+propagation of changes.
+
+Problem 2:
+In the Ledger class, there are a cluster of methods or codes for the new functionality of category. There are methods 
+to initCategory, getIncomeCategory, getExpenseCategory, checkIncomeCategory and checkExpenseCategory. The category
+has its own data with the category name as key, which might be subject to change, and the subtotal for each key as data
+needs to be updated every time an item is added or deleted, which results in duplicate codes. This category cluster
+may cause the Ledger class to violate cohesion principle.
+
+Refactor 2:
+A new Category class is created and the related methods and codes from Ledger class, ReportFrame class and LedgerConsole
+class are migrated to the new class.

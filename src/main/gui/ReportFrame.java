@@ -82,34 +82,10 @@ public class ReportFrame extends JFrame {
     private String percentageString() {
         String header = newsection + "Category Percentage" + newline;
         String incomeSection = "Your income consists of:" + newline;
-        StringBuilder incomePercentage = new StringBuilder();
+        StringBuilder incomePercentage = myLedger.getCategory().incomePercentageToString(myLedger);
         String expenseSection = "Your expense consists of:" + newline;
-        StringBuilder expensePercentage = new StringBuilder();
-        if (myLedger.getTotalIncome() != 0) {
-            StringBuilder finalIncomePercentage = incomePercentage;
-            myLedger.getIncomeCategory().forEach((name, subtotal) ->
-                    finalIncomePercentage.append(name).append(space).append(subtotal).append(space).append(roundPct(
-                            subtotal / myLedger.getTotalIncome() * 100)).append("%").append(newline));
-        } else {
-            incomePercentage.append("No income item in the ledger.").append(newline);
-        }
-
-        if (myLedger.getTotalExpense() != 0) {
-            StringBuilder finalExpensePercentage = expensePercentage;
-            myLedger.getExpenseCategory().forEach((name, subtotal) ->
-                    finalExpensePercentage.append(name).append(space).append(subtotal).append(space).append(roundPct(
-                            subtotal / myLedger.getTotalExpense() * 100)).append("%").append(newline));
-        } else {
-            expensePercentage.append("No expense item in the ledger.").append(newline);
-        }
+        StringBuilder expensePercentage = myLedger.getCategory().expensePercentageToString(myLedger);
         return header + incomeSection + incomePercentage + expenseSection + expensePercentage;
-    }
-
-    // EFFECTS: rounds up percentages in category percentage string
-    private double roundPct(double amount) {
-        long temp = Math.round(amount * (long) Math.pow(10, 2));
-        amount = (double) temp / (long) Math.pow(10, 2);
-        return amount;
     }
 
     // EFFECTS: adds an image based on net income

@@ -12,8 +12,7 @@ import java.util.*;
 // Represents a ledger having a list of income and expense items
 public class Ledger implements Saveable {
     private List<Item> myLedger;
-    private Map<String, Double> expenseCategory;
-    private Map<String, Double> incomeCategory;
+    private Category category;
     private double totalIncome;
     private double totalExpense;
     private double netIncome = totalIncome - totalExpense;
@@ -21,7 +20,7 @@ public class Ledger implements Saveable {
     // EFFECTS: constructs an empty ledger and initialize the category list
     public Ledger() {
         myLedger = new LinkedList<>();
-        initCategory();
+        category = new Category();
     }
 
     // MODIFIES: this
@@ -31,36 +30,23 @@ public class Ledger implements Saveable {
         if (isDuplicate(type, date, entity, amount)) {
             throw new DuplicateItemException();
         }
-        boolean convertedType = (type.equals("income"));
-        Item item = new Item(convertedType, date, entity, description, category, amount);
+        Item item = new Item(type.equals("income"), date, entity, description, category, amount);
         item.setId(myLedger.size());
-        myLedger.add(item);
-        if (convertedType) {
-            incomeCategory.computeIfPresent(category, (name, subtotal) -> subtotal + amount);
+        this.category.calculateSubtotal(category, amount);
+        if (type.equals("income")) {
             totalIncome += amount;
         } else {
-            expenseCategory.computeIfPresent(category, (name, subtotal) -> subtotal + amount);
             totalExpense += amount;
         }
+        myLedger.add(item);
         netIncome = totalIncome - totalExpense;
     }
 
     // MODIFIES: this
     // EFFECTS: overload the addItem method with item as parameter
     public void addItem(Item item) throws DuplicateItemException {
-        if (isDuplicate(item.isIncome() ? "income" : "expense", item.getDate(), item.getEntity(), item.getAmount())) {
-            throw new DuplicateItemException();
-        }
-        item.setId(myLedger.size());
-        myLedger.add(item);
-        if (item.isIncome()) {
-            incomeCategory.computeIfPresent(item.getCategory(), (name, subtotal) -> subtotal + item.getAmount());
-            totalIncome += item.getAmount();
-        } else {
-            expenseCategory.computeIfPresent(item.getCategory(), (name, subtotal) -> subtotal + item.getAmount());
-            totalExpense += item.getAmount();
-        }
-        netIncome = totalIncome - totalExpense;
+        addItem(item.isIncome() ? "income" : "expense", item.getDate(), item.getEntity(),
+                item.getDescription(), item.getCategory(), item.getAmount());
     }
 
     // MODIFIES: this
@@ -76,16 +62,15 @@ public class Ledger implements Saveable {
             throw new InvalidIDException();
         }
         Item itemToBeDeleted = myLedger.get(id - 1);
+        this.category.calculateSubtotal(itemToBeDeleted.getCategory(), - itemToBeDeleted.getAmount());
         if (itemToBeDeleted.isIncome()) {
             totalIncome -= itemToBeDeleted.getAmount();
-            incomeCategory.computeIfPresent(itemToBeDeleted.getCategory(), (n, s) -> s - itemToBeDeleted.getAmount());
 
         } else {
             totalExpense -= itemToBeDeleted.getAmount();
-            expenseCategory.computeIfPresent(itemToBeDeleted.getCategory(), (n, s) -> s - itemToBeDeleted.getAmount());
         }
-        netIncome = totalIncome - totalExpense;
         myLedger.remove(id - 1);
+        netIncome = totalIncome - totalExpense;
         int i = 0;
         for (Item item : myLedger) {
             item.setId(i);
@@ -98,32 +83,13 @@ public class Ledger implements Saveable {
     public String toString() {
         StringBuilder printLedger = new StringBuilder();
         for (Item item : myLedger) {
-            double amount = item.getAmount();
-            if (!item.isIncome()) {
-                amount = -item.getAmount();
-            }
+            double amount = item.isIncome() ? item.getAmount() : -item.getAmount();
             String typeStr = item.isIncome() ? "Income" : "Expense";
             printLedger.append(item.getId()).append("    ").append(typeStr).append("    ").append(item.getDate())
                     .append("    ").append(item.getEntity()).append("    ").append(item.getDescription()).append("    ")
                     .append(item.getCategory()).append("    ").append(amount).append("\n");
         }
         return printLedger.toString();
-    }
-
-    // EFFECTS: initialize the income category list and expense category list
-    private void initCategory() {
-        incomeCategory = new HashMap<String, Double>();
-        incomeCategory.put("Salary", 0.00);
-        incomeCategory.put("Investment", 0.00);
-        expenseCategory = new HashMap<String, Double>();
-        expenseCategory.put("Housing", 0.00);
-        expenseCategory.put("Transportation", 0.00);
-        expenseCategory.put("Food", 0.00);
-        expenseCategory.put("Clothing", 0.00);
-        expenseCategory.put("Utilities", 0.00);
-        expenseCategory.put("Entertainment", 0.00);
-        expenseCategory.put("Medical", 0.00);
-        expenseCategory.put("Miscellaneous", 0.00);
     }
 
     // EFFECTS: returns the total income amount on this ledger
@@ -178,16 +144,6 @@ public class Ledger implements Saveable {
         return myLedger.get(id - 1);
     }
 
-    // EFFECTS: returns the income category list
-    public Map<String, Double> getIncomeCategory() {
-        return incomeCategory;
-    }
-
-    // EFFECTS: returns the expense category list
-    public Map<String, Double> getExpenseCategory() {
-        return expenseCategory;
-    }
-
     // EFFECTS: check if the given type is valid; if not, throw InvalidTypeException
     public void checkType(String inputType) throws InvalidTypeException {
         if (!inputType.equals("income") && !inputType.equals("expense")) {
@@ -203,20 +159,6 @@ public class Ledger implements Saveable {
             tryDate = dateFormat.parse(inputDate);
         } catch (ParseException e) {
             throw new InvalidDateException();
-        }
-    }
-
-    // EFFECTS: check if the given income category is valid; if not, throw InvalidCategoryException
-    public void checkIncomeCategory(String inputCategory) throws InvalidCategoryException {
-        if (!incomeCategory.containsKey(inputCategory)) {
-            throw new InvalidCategoryException();
-        }
-    }
-
-    // EFFECTS: check if the given expense category is valid; if not, throw InvalidCategoryException
-    public void checkExpenseCategory(String inputCategory) throws InvalidCategoryException {
-        if (!expenseCategory.containsKey(inputCategory)) {
-            throw new InvalidCategoryException();
         }
     }
 
@@ -259,6 +201,12 @@ public class Ledger implements Saveable {
         }
     }
 
+    // EFFECTS: returns category
+    public Category getCategory() {
+        return category;
+    }
+
+    // EFFECTS: returns ledger
     public List<Item> getMyLedger() {
         return myLedger;
     }
