@@ -18,10 +18,6 @@ public class ReportFrame extends JFrame {
     private static final String newline = "\n";
     private static final String newsection = "====================\n";
 
-    private JScrollPane scrollPane;
-    private JTextArea textArea;
-    private JLabel picture;
-
     private Ledger myLedger;
 
     // EFFECTS: constructs report frame
@@ -34,10 +30,10 @@ public class ReportFrame extends JFrame {
 
         this.myLedger = myLedger;
 
-        textArea = new JTextArea();
+        JTextArea textArea = new JTextArea();
         textArea.setEditable(false);
-        scrollPane = new JScrollPane(textArea);
-        picture = new JLabel();
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        JLabel picture = new JLabel();
         picture.setIcon(addImage(myLedger));
 
         add(scrollPane, BorderLayout.CENTER);

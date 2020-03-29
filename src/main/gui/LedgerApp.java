@@ -21,8 +21,6 @@ public class LedgerApp extends JFrame {
     private static final String RECOVER_FILE = "./data/recover.txt";
 
     public static Ledger myLedger;
-    private InputPanel inputPanel;
-    private OutputPanel outputPanel;
 
     // EFFECTS: constructs main window
     public LedgerApp() {
@@ -34,8 +32,8 @@ public class LedgerApp extends JFrame {
 
         myLedger = new Ledger();
 
-        outputPanel = new OutputPanel();
-        inputPanel = new InputPanel(outputPanel);
+        OutputPanel outputPanel = new OutputPanel();
+        InputPanel inputPanel = new InputPanel(outputPanel);
         add(inputPanel, BorderLayout.WEST);
         add(outputPanel, BorderLayout.EAST);
 

@@ -17,7 +17,6 @@ public class OutputPanel extends JPanel implements ActionListener {
     private static final int BORDER = 5;
 
     private JList dataList;
-    private JScrollPane scrollPane;
     private JButton reviewButton;
     private JButton hideButton;
     private JButton deleteButton;
@@ -42,7 +41,7 @@ public class OutputPanel extends JPanel implements ActionListener {
         dataList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         dataList.setVisibleRowCount(-1);
 
-        scrollPane = new JScrollPane(dataList);
+        JScrollPane scrollPane = new JScrollPane(dataList);
         scrollPane.setPreferredSize(new Dimension(450, 450));
         scrollPane.setViewportView(dataList);
 

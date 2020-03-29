@@ -12,7 +12,7 @@ import java.util.*;
 // Represents a ledger having a list of income and expense items
 public class Ledger implements Saveable {
     private List<Item> myLedger;
-    private Category category;
+    private static Category category = new Category();
     private double totalIncome;
     private double totalExpense;
     private double netIncome = totalIncome - totalExpense;
@@ -202,7 +202,7 @@ public class Ledger implements Saveable {
     }
 
     // EFFECTS: returns category
-    public Category getCategory() {
+    public static Category getCategory() {
         return category;
     }
 

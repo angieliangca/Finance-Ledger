@@ -57,7 +57,7 @@ class LedgerTest {
         assertEquals(1000, testLedger.getNetIncome());
         assertEquals(1, testLedger.getMaxIncome());
         assertEquals(0, testLedger.getMaxExpense());
-        assertEquals(1000, (testLedger.getCategory().getIncomeCategory().get("Salary")));
+        assertEquals(1000, (Ledger.getCategory().getIncomeCategory().get("Salary")));
     }
 
     @Test
@@ -73,7 +73,7 @@ class LedgerTest {
         assertEquals(1000, testLedger.getNetIncome());
         assertEquals(1, testLedger.getMaxIncome());
         assertEquals(0, testLedger.getMaxExpense());
-        assertEquals(1000, (testLedger.getCategory().getIncomeCategory().get("Salary")));
+        assertEquals(1000, (Ledger.getCategory().getIncomeCategory().get("Salary")));
     }
 
     @Test
@@ -90,7 +90,7 @@ class LedgerTest {
         assertEquals(-800, testLedger.getNetIncome());
         assertEquals(0, testLedger.getMaxIncome());
         assertEquals(1, testLedger.getMaxExpense());
-        assertEquals(800, (testLedger.getCategory().getExpenseCategory().get("Housing")));
+        assertEquals(800, (Ledger.getCategory().getExpenseCategory().get("Housing")));
     }
 
     @Test
@@ -106,7 +106,7 @@ class LedgerTest {
         assertEquals(-800, testLedger.getNetIncome());
         assertEquals(0, testLedger.getMaxIncome());
         assertEquals(1, testLedger.getMaxExpense());
-        assertEquals(800, (testLedger.getCategory().getExpenseCategory().get("Housing")));
+        assertEquals(800, (Ledger.getCategory().getExpenseCategory().get("Housing")));
     }
 
     @Test
@@ -127,8 +127,8 @@ class LedgerTest {
         assertEquals(-200, testLedger.getNetIncome());
         assertEquals(5, testLedger.getMaxIncome());
         assertEquals(2, testLedger.getMaxExpense());
-        assertEquals(250, (testLedger.getCategory().getExpenseCategory().get("Miscellaneous")));
-        assertEquals(50, (testLedger.getCategory().getIncomeCategory().get("Salary")));
+        assertEquals(250, (Ledger.getCategory().getExpenseCategory().get("Miscellaneous")));
+        assertEquals(50, (Ledger.getCategory().getIncomeCategory().get("Salary")));
 
         // test adding item that throw DuplicateItemException
         try {
@@ -160,7 +160,7 @@ class LedgerTest {
         assertEquals(0, testLedger.getNetIncome());
         assertEquals(0, testLedger.getMaxIncome());
         assertEquals(0, testLedger.getMaxExpense());
-        assertEquals(0, (testLedger.getCategory().getIncomeCategory().get("Salary")));
+        assertEquals(0, (Ledger.getCategory().getIncomeCategory().get("Salary")));
     }
 
     @Test
@@ -177,7 +177,7 @@ class LedgerTest {
         assertEquals(0, testLedger.getNetIncome());
         assertEquals(0, testLedger.getMaxIncome());
         assertEquals(0, testLedger.getMaxExpense());
-        assertEquals(0, (testLedger.getCategory().getExpenseCategory().get("Housing")));
+        assertEquals(0, (Ledger.getCategory().getExpenseCategory().get("Housing")));
     }
 
     @Test
@@ -208,7 +208,7 @@ class LedgerTest {
         assertEquals(-50, testLedger.getNetIncome());
         assertEquals(0, testLedger.getMaxIncome());
         assertEquals(1, testLedger.getMaxExpense());
-        assertEquals(50, (testLedger.getCategory().getExpenseCategory().get("Miscellaneous")));
+        assertEquals(50, (Ledger.getCategory().getExpenseCategory().get("Miscellaneous")));
     }
 
     @Test
@@ -225,16 +225,16 @@ class LedgerTest {
         assertEquals(220, testLedger.getNetIncome());
         assertEquals(1, testLedger.getMaxIncome());
         assertEquals(2, testLedger.getMaxExpense());
-        assertEquals(800, (testLedger.getCategory().getExpenseCategory().get("Housing")));
-        assertEquals(0, (testLedger.getCategory().getExpenseCategory().get("Transportation")));
-        assertEquals(30, (testLedger.getCategory().getExpenseCategory().get("Food")));
-        assertEquals(0, (testLedger.getCategory().getExpenseCategory().get("Clothing")));
-        assertEquals(0, (testLedger.getCategory().getExpenseCategory().get("Utilities")));
-        assertEquals(0, (testLedger.getCategory().getExpenseCategory().get("Entertainment")));
-        assertEquals(0, (testLedger.getCategory().getExpenseCategory().get("Medical")));
-        assertEquals(1000, (testLedger.getCategory().getIncomeCategory().get("Salary")));
-        assertEquals(100, (testLedger.getCategory().getIncomeCategory().get("Investment")));
-        assertEquals(50, (testLedger.getCategory().getExpenseCategory().get("Miscellaneous")));
+        assertEquals(800, (Ledger.getCategory().getExpenseCategory().get("Housing")));
+        assertEquals(0, (Ledger.getCategory().getExpenseCategory().get("Transportation")));
+        assertEquals(30, (Ledger.getCategory().getExpenseCategory().get("Food")));
+        assertEquals(0, (Ledger.getCategory().getExpenseCategory().get("Clothing")));
+        assertEquals(0, (Ledger.getCategory().getExpenseCategory().get("Utilities")));
+        assertEquals(0, (Ledger.getCategory().getExpenseCategory().get("Entertainment")));
+        assertEquals(0, (Ledger.getCategory().getExpenseCategory().get("Medical")));
+        assertEquals(1000, (Ledger.getCategory().getIncomeCategory().get("Salary")));
+        assertEquals(100, (Ledger.getCategory().getIncomeCategory().get("Investment")));
+        assertEquals(50, (Ledger.getCategory().getExpenseCategory().get("Miscellaneous")));
     }
 
     @Test
@@ -251,11 +251,11 @@ class LedgerTest {
         assertEquals(1020, testLedger.getNetIncome());
         assertEquals(1, testLedger.getMaxIncome());
         assertEquals(2, testLedger.getMaxExpense());
-        assertEquals(0, (testLedger.getCategory().getExpenseCategory().get("Housing")));
+        assertEquals(0, (Ledger.getCategory().getExpenseCategory().get("Housing")));
 
         testLedger.deleteItem(3);
         assertEquals(30, testLedger.getItem(3).getAmount());
-        assertEquals(30, (testLedger.getCategory().getExpenseCategory().get("Food")));
+        assertEquals(30, (Ledger.getCategory().getExpenseCategory().get("Food")));
         testLedger.deleteItem(3);
         assertEquals(2, testLedger.numItems());
         assertEquals(1000, testLedger.getTotalIncome());
@@ -263,16 +263,16 @@ class LedgerTest {
         assertEquals(950, testLedger.getNetIncome());
         assertEquals(1, testLedger.getMaxIncome());
         assertEquals(2, testLedger.getMaxExpense());
-        assertEquals(0, (testLedger.getCategory().getExpenseCategory().get("Housing")));
-        assertEquals(0, (testLedger.getCategory().getExpenseCategory().get("Transportation")));
-        assertEquals(0, (testLedger.getCategory().getExpenseCategory().get("Food")));
-        assertEquals(0, (testLedger.getCategory().getExpenseCategory().get("Clothing")));
-        assertEquals(0, (testLedger.getCategory().getExpenseCategory().get("Utilities")));
-        assertEquals(0, (testLedger.getCategory().getExpenseCategory().get("Entertainment")));
-        assertEquals(0, (testLedger.getCategory().getExpenseCategory().get("Medical")));
-        assertEquals(1000, (testLedger.getCategory().getIncomeCategory().get("Salary")));
-        assertEquals(0, (testLedger.getCategory().getIncomeCategory().get("Investment")));
-        assertEquals(50, (testLedger.getCategory().getExpenseCategory().get("Miscellaneous")));
+        assertEquals(0, (Ledger.getCategory().getExpenseCategory().get("Housing")));
+        assertEquals(0, (Ledger.getCategory().getExpenseCategory().get("Transportation")));
+        assertEquals(0, (Ledger.getCategory().getExpenseCategory().get("Food")));
+        assertEquals(0, (Ledger.getCategory().getExpenseCategory().get("Clothing")));
+        assertEquals(0, (Ledger.getCategory().getExpenseCategory().get("Utilities")));
+        assertEquals(0, (Ledger.getCategory().getExpenseCategory().get("Entertainment")));
+        assertEquals(0, (Ledger.getCategory().getExpenseCategory().get("Medical")));
+        assertEquals(1000, (Ledger.getCategory().getIncomeCategory().get("Salary")));
+        assertEquals(0, (Ledger.getCategory().getIncomeCategory().get("Investment")));
+        assertEquals(50, (Ledger.getCategory().getExpenseCategory().get("Miscellaneous")));
     }
 
     @Test

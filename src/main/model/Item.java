@@ -1,6 +1,5 @@
 package model;
 
-
 // Represents an item in the ledger that has the following information: item number, income or expense type, date,
 // payee or payer entity, description, category and amount
 public class Item {

@@ -42,7 +42,7 @@ public class Category {
         StringBuilder incomePercentage = new StringBuilder();
         if (myLedger.getTotalIncome() != 0) {
             StringBuilder finalIncomePercentage = incomePercentage;
-            myLedger.getCategory().getIncomeCategory().forEach((name, subtotal) ->
+            myLedger.getCategory().incomeCategory.forEach((name, subtotal) ->
                     finalIncomePercentage.append(name).append(space).append(subtotal).append(space).append(roundPct(
                             subtotal / myLedger.getTotalIncome() * 100)).append("%").append(newline));
             return finalIncomePercentage;
@@ -57,7 +57,7 @@ public class Category {
         StringBuilder expensePercentage = new StringBuilder();
         if (myLedger.getTotalExpense() != 0) {
             StringBuilder finalExpensePercentage = expensePercentage;
-            myLedger.getCategory().getExpenseCategory().forEach((name, subtotal) ->
+            myLedger.getCategory().expenseCategory.forEach((name, subtotal) ->
                     finalExpensePercentage.append(name).append(space).append(subtotal).append(space).append(roundPct(
                             subtotal / myLedger.getTotalExpense() * 100)).append("%").append(newline));
             return finalExpensePercentage;
@@ -97,5 +97,4 @@ public class Category {
     public Map<String, Double> getExpenseCategory() {
         return expenseCategory;
     }
-
 }

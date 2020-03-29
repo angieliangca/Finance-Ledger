@@ -10,12 +10,11 @@ import java.io.IOException;
 // Represents the file chooser in which user can load data
 public class FileChooser extends JFrame {
 
-    private JFileChooser fc;
     private static final String LEDGER_FILE = "./data/myLedger.txt";
 
     // EFFECTS: constructs the file chooser
     public FileChooser() {
-        fc = new JFileChooser();
+        JFileChooser fc = new JFileChooser();
         fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         fc.setCurrentDirectory(new File(LEDGER_FILE));
 

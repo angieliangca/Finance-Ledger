@@ -102,4 +102,5 @@ may cause the Ledger class to violate cohesion principle.
 
 Refactor 2:
 A new Category class is created and the related methods and codes from Ledger class, ReportFrame class and LedgerConsole
-class are migrated to the new class.
+class are migrated to the new class. To ensure each ledger only has one instance of category, the singleton pattern is
+applied for the Category in the Ledger class.
