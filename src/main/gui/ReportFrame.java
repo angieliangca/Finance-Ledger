@@ -14,27 +14,22 @@ public class ReportFrame extends JFrame {
     private static final int HEIGHT = 500;
     private static final int BORDER = 10;
     private static final String header = "Your financial summary:";
-    private static final String space = "        ";
     private static final String newline = "\n";
     private static final String newsection = "====================\n";
 
-    private Ledger myLedger;
-
     // EFFECTS: constructs report frame
-    public ReportFrame(Ledger myLedger) {
+    public ReportFrame() {
         super("Financial Report");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(WIDTH, HEIGHT);
         ((JPanel) getContentPane()).setBorder(new EmptyBorder(BORDER, BORDER, BORDER, BORDER));
         setLayout(new BorderLayout());
 
-        this.myLedger = myLedger;
-
         JTextArea textArea = new JTextArea();
         textArea.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(textArea);
         JLabel picture = new JLabel();
-        picture.setIcon(addImage(myLedger));
+        picture.setIcon(addImage(LedgerApp.myLedger));
 
         add(scrollPane, BorderLayout.CENTER);
         add(picture, BorderLayout.EAST);
@@ -48,9 +43,9 @@ public class ReportFrame extends JFrame {
 
     // EFFECTS: constructs summary string
     private String summaryString() {
-        String totalIncome = "Total income: " + myLedger.getTotalIncome();
-        String totalExpense = "Total expense: " + myLedger.getTotalExpense();
-        String netIncome = "Net income: " + myLedger.getNetIncome();
+        String totalIncome = "Total income: " + LedgerApp.myLedger.getTotalIncome();
+        String totalExpense = "Total expense: " + LedgerApp.myLedger.getTotalExpense();
+        String netIncome = "Net income: " + LedgerApp.myLedger.getNetIncome();
         return totalIncome + newline + totalExpense + newline + netIncome + newline;
     }
 
@@ -59,14 +54,14 @@ public class ReportFrame extends JFrame {
         String header = newsection + "Maximum Single Items" + newline;
         String maxIncome;
         String maxExpense;
-        if (myLedger.getMaxIncome() != 0) {
-            Item maxSingleIncome = myLedger.getItem(myLedger.getMaxIncome());
+        if (LedgerApp.myLedger.getMaxIncome() != 0) {
+            Item maxSingleIncome = LedgerApp.myLedger.getItem(LedgerApp.myLedger.getMaxIncome());
             maxIncome = "You receive most on: " + newline + maxSingleIncome.toString().substring(10) + newline;
         } else {
             maxIncome = "No income item in the ledger." + newline;
         }
-        if (myLedger.getMaxExpense() != 0) {
-            Item maxSingleExpense = myLedger.getItem(myLedger.getMaxExpense());
+        if (LedgerApp.myLedger.getMaxExpense() != 0) {
+            Item maxSingleExpense = LedgerApp.myLedger.getItem(LedgerApp.myLedger.getMaxExpense());
             maxExpense = "You spend most on: " + newline + maxSingleExpense.toString().substring(11) + newline;
         } else {
             maxExpense = "No expense item in the ledger." + newline;
@@ -78,9 +73,11 @@ public class ReportFrame extends JFrame {
     private String percentageString() {
         String header = newsection + "Category Percentage" + newline;
         String incomeSection = "Your income consists of:" + newline;
-        StringBuilder incomePercentage = myLedger.getCategory().incomePercentageToString(myLedger);
+        StringBuilder incomePercentage = LedgerApp.myLedger.getCategory()
+                .incomePercentageToString(LedgerApp.myLedger);
         String expenseSection = "Your expense consists of:" + newline;
-        StringBuilder expensePercentage = myLedger.getCategory().expensePercentageToString(myLedger);
+        StringBuilder expensePercentage = LedgerApp.myLedger.getCategory()
+                .expensePercentageToString(LedgerApp.myLedger);
         return header + incomeSection + incomePercentage + expenseSection + expensePercentage;
     }
 

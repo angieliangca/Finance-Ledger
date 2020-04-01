@@ -99,7 +99,7 @@ public class OutputPanel extends JPanel implements ActionListener {
         }
 
         if (e.getActionCommand().equals("report")) {
-            new ReportFrame(LedgerApp.myLedger);
+            new ReportFrame();
         }
 
         if (e.getActionCommand().equals("hide")) {

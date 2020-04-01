@@ -44,6 +44,8 @@ before exiting the program, a recover.txt file is saved when you close the windo
 like to reload.
 
 - More details can be found in GUI Navigation section below.
+
+### GUI Navigation
 (a) The control pane at the bottom of the main window has six buttons for six user stories. 
 (b) The user can either load data from an existing file by clicking the Load Ledger button to open a file chooser where 
 they can select a txt file, or start with an empty ledger. In this demo, you may select the myLedger.txt file from the 
@@ -83,24 +85,34 @@ the InvalidIDException is expected.
 ## Phase 4: Task 3
 
 Problem 1:
-In the Ledger class, there are two addItem methods, one with six parameters called by LedgerConsole, InputPanel and 
-LedgerTest while the other one with one parameter called by Reader, LedgerTest and WriterTest. Because the six 
-parameters are the fields of the one parameter Item, there are duplicate codes in these two methods and if changes
-are made in the caller class, these two methods will have to change simultaneously to maintain the functionality. These
-two addItem methods may cause too much inter-class coupling.
+In the Ledger class, there was a cluster of methods or codes for the new functionality of category. There were methods 
+to initCategory, getIncomeCategory, getExpenseCategory, checkIncomeCategory and checkExpenseCategory. The category
+has its own data with the category name as key, and the subtotal for each key as data needs to be updated every time an 
+item is added or deleted, which results in duplicate codes. This category cluster may cause the Ledger class to violate 
+cohesion principle.
 
 Refactor 1:
-The second method has been refactored to call the first method by decomposing the Item. In this way, there will be less 
-propagation of changes.
+I created a new Category class and moved the related methods and codes from Ledger class, LedgerConsole class and 
+ReportFrame class to the new class. So the Category class has single responsibility. This may increase the cohesion of 
+mentioned classes.
 
 Problem 2:
-In the Ledger class, there are a cluster of methods or codes for the new functionality of category. There are methods 
-to initCategory, getIncomeCategory, getExpenseCategory, checkIncomeCategory and checkExpenseCategory. The category
-has its own data with the category name as key, which might be subject to change, and the subtotal for each key as data
-needs to be updated every time an item is added or deleted, which results in duplicate codes. This category cluster
-may cause the Ledger class to violate cohesion principle.
+In the ReportFrame class, there was a field of type Ledger, the value of this field is assigned by the parameter passed 
+in the constructor, and ReportFrame object is instantiated from the LedgerApp class. The ReportFrame class used some
+methods including getTotalIncome, getTotalExpense, getNetIncome, getMaxIncome, getMaxExpense, getItem and getCategory in
+the Ledger class. 
 
-Refactor 2:
-A new Category class is created and the related methods and codes from Ledger class, ReportFrame class and LedgerConsole
-class are migrated to the new class. To ensure each ledger only has one instance of category, the singleton pattern is
-applied for the Category in the Ledger class.
+Refactor 2: 
+I removed the Ledger field and the parameter of the constructor in the ReportFrame class. Instead, I used the Ledger 
+instantiation in the LedgerApp class. Then in the gui package, only the LedgerApp class has association with the Ledger 
+class, and other classes in the gui package use the instantiation of the Ledger in the LedgerApp class. This may reduce 
+the coupling between Ledger and classes in the gui package.
+
+Problem 3:
+In the Ledger class, there are two addItem methods, one with six parameters called by LedgerConsole, InputPanel and 
+LedgerTest while the other one with one parameter called by Reader, LedgerTest and WriterTest. Because the six 
+parameters are the fields of the one parameter Item, there are duplicate codes in these two methods.
+
+Refactor 3:
+The second method has been refactored to call the first method by decomposing the Item. In this way, there will be less 
+propagation of changes.
